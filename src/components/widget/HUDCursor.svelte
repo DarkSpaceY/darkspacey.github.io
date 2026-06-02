@@ -1,31 +1,45 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { CustomCursor, Ripple } from "mouse-animations";
+  import { Invert } from "mouse-animations";
 
-  let cursor: CustomCursor | null = null;
-  let ripple: Ripple | null = null;
+  const BASE_SIZE = 40;
+  const HOVER_SIZE = 100;
+
+  let invert: Invert | null = null;
+  let el: HTMLElement | null = null;
 
   onMount(() => {
     const hue = getComputedStyle(document.documentElement).getPropertyValue("--primary-hue") || "250";
 
-    cursor = new CustomCursor({
-      innerSize: 6,
-      outerSize: 28,
-      innerColor: `hsl(${hue}, 70%, 65%)`,
-      outerColor: `hsla(${hue}, 60%, 60%, 0.35)`,
-      smoothness: 0.1,
+    invert = new Invert({
+      size: BASE_SIZE,
+      color: `hsl(${hue}, 70%, 65%)`,
+      smoothness: 0.12,
       hideDefault: true,
     });
 
-    ripple = new Ripple({
-      color: `hsla(${hue}, 70%, 65%, 0.25)`,
-      duration: 700,
-      maxSize: 60,
+    el = document.querySelector(".__ma-invert") as HTMLElement;
+    if (el) el.style.transition = "width 0.3s ease, height 0.3s ease, background 0.3s ease";
+
+    const onEnter = () => {
+      if (!el) return;
+      el.style.width = `${HOVER_SIZE}px`;
+      el.style.height = `${HOVER_SIZE}px`;
+    };
+    const onLeave = () => {
+      if (!el) return;
+      el.style.width = `${BASE_SIZE}px`;
+      el.style.height = `${BASE_SIZE}px`;
+    };
+
+    const selectors = 'a, button, input, textarea, [role="button"], .btn-regular, .btn-plain, .btn-card, [contenteditable], label, select, summary';
+    document.querySelectorAll(selectors).forEach((target) => {
+      target.addEventListener("mouseenter", onEnter);
+      target.addEventListener("mouseleave", onLeave);
     });
   });
 
   onDestroy(() => {
-    cursor?.destroy();
-    ripple?.destroy();
+    invert?.destroy();
   });
 </script>
