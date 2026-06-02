@@ -1,7 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
 import Categories from "./Categories.astro";
-import MusicPlayer from "./MusicPlayer.svelte";
 import Profile from "./Profile.astro";
 import SiteStats from "./SiteStats.astro";
 import Tag from "./Tags.astro";
@@ -16,8 +15,6 @@ const className = Astro.props.class;
 <div id="sidebar" class:list={[className, "w-full"]}>
     <div class="flex flex-col w-full gap-4 mb-4">
         <Profile></Profile>
-        <!-- @ts-expect-error client:only is an Astro directive, not a prop -->
-        <MusicPlayer client:only="svelte"></MusicPlayer>
         <SiteStats />
     </div>
     <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
