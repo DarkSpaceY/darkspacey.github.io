@@ -1,128 +1,128 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import Icon from '@iconify/svelte';
+import Icon from "@iconify/svelte";
+import { onDestroy, onMount } from "svelte";
 
-  interface Track {
-    title: string;
-    artist: string;
-    cover: string;
-    src: string;
-  }
+interface Track {
+	title: string;
+	artist: string;
+	cover: string;
+	src: string;
+}
 
-  const playlist: Track[] = [
-    {
-      title: 'Canvas',
-      artist: 'Dexter Britain',
-      cover: 'https://picsum.photos/seed/music1/400/400',
-      src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    },
-    {
-      title: 'Dreams',
-      artist: 'Benjamin Tissot',
-      cover: 'https://picsum.photos/seed/music2/400/400',
-      src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    },
-    {
-      title: 'Stellar',
-      artist: 'Alex Productions',
-      cover: 'https://picsum.photos/seed/music3/400/400',
-      src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-    },
-  ];
+const playlist: Track[] = [
+	{
+		title: "Canvas",
+		artist: "Dexter Britain",
+		cover: "https://picsum.photos/seed/music1/400/400",
+		src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+	},
+	{
+		title: "Dreams",
+		artist: "Benjamin Tissot",
+		cover: "https://picsum.photos/seed/music2/400/400",
+		src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+	},
+	{
+		title: "Stellar",
+		artist: "Alex Productions",
+		cover: "https://picsum.photos/seed/music3/400/400",
+		src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+	},
+];
 
-  let currentIndex = $state(0);
-  let isPlaying = $state(false);
-  let currentTime = $state(0);
-  let duration = $state(0);
-  let audioElement: HTMLAudioElement | null = null;
-  let progressBar = $state<HTMLDivElement | null>(null);
+let currentIndex = $state(0);
+let isPlaying = $state(false);
+let currentTime = $state(0);
+let duration = $state(0);
+let audioElement: HTMLAudioElement | null = null;
+let progressBar = $state<HTMLDivElement | null>(null);
 
-  const currentTrack = $derived(playlist[currentIndex]);
+const currentTrack = $derived(playlist[currentIndex]);
 
-  function togglePlay() {
-    if (!audioElement) return;
-    if (isPlaying) {
-      audioElement.pause();
-    } else {
-      audioElement.play();
-    }
-    isPlaying = !isPlaying;
-  }
+function togglePlay() {
+	if (!audioElement) return;
+	if (isPlaying) {
+		audioElement.pause();
+	} else {
+		audioElement.play();
+	}
+	isPlaying = !isPlaying;
+}
 
-  function nextTrack() {
-    currentIndex = (currentIndex + 1) % playlist.length;
-    isPlaying = false;
-    setTimeout(() => {
-      if (audioElement) {
-        audioElement.src = playlist[currentIndex].src;
-        audioElement.load();
-        audioElement.play();
-        isPlaying = true;
-      }
-    }, 50);
-  }
+function nextTrack() {
+	currentIndex = (currentIndex + 1) % playlist.length;
+	isPlaying = false;
+	setTimeout(() => {
+		if (audioElement) {
+			audioElement.src = playlist[currentIndex].src;
+			audioElement.load();
+			audioElement.play();
+			isPlaying = true;
+		}
+	}, 50);
+}
 
-  function prevTrack() {
-    currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-    isPlaying = false;
-    setTimeout(() => {
-      if (audioElement) {
-        audioElement.src = playlist[currentIndex].src;
-        audioElement.load();
-        audioElement.play();
-        isPlaying = true;
-      }
-    }, 50);
-  }
+function prevTrack() {
+	currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+	isPlaying = false;
+	setTimeout(() => {
+		if (audioElement) {
+			audioElement.src = playlist[currentIndex].src;
+			audioElement.load();
+			audioElement.play();
+			isPlaying = true;
+		}
+	}, 50);
+}
 
-  function handleProgressClick(e: MouseEvent) {
-    if (!audioElement || !progressBar) return;
-    const rect = progressBar.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    audioElement.currentTime = ratio * duration;
-  }
+function handleProgressClick(e: MouseEvent) {
+	if (!audioElement || !progressBar) return;
+	const rect = progressBar.getBoundingClientRect();
+	const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+	audioElement.currentTime = ratio * duration;
+}
 
-  function formatTime(seconds: number): string {
-    if (!seconds || !isFinite(seconds)) return '0:00';
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  }
+function formatTime(seconds: number): string {
+	if (!seconds || !Number.isFinite(seconds)) return "0:00";
+	const m = Math.floor(seconds / 60);
+	const s = Math.floor(seconds % 60);
+	return `${m}:${s.toString().padStart(2, "0")}`;
+}
 
-  let mounted = $state(false);
-  onMount(() => {
-    mounted = true;
-    audioElement = new Audio(playlist[currentIndex].src);
-    audioElement.preload = 'auto';
+let mounted = $state(false);
+onMount(() => {
+	mounted = true;
+	audioElement = new Audio(playlist[currentIndex].src);
+	audioElement.preload = "auto";
 
-    audioElement.addEventListener('timeupdate', () => {
-      if (audioElement) currentTime = audioElement.currentTime;
-    });
+	audioElement.addEventListener("timeupdate", () => {
+		if (audioElement) currentTime = audioElement.currentTime;
+	});
 
-    audioElement.addEventListener('loadedmetadata', () => {
-      if (audioElement) duration = audioElement.duration;
-    });
+	audioElement.addEventListener("loadedmetadata", () => {
+		if (audioElement) duration = audioElement.duration;
+	});
 
-    audioElement.addEventListener('ended', () => {
-      isPlaying = false;
-    });
+	audioElement.addEventListener("ended", () => {
+		isPlaying = false;
+	});
 
-    audioElement.addEventListener('play', () => {
-      isPlaying = true;
-    });
+	audioElement.addEventListener("play", () => {
+		isPlaying = true;
+	});
 
-    audioElement.addEventListener('pause', () => {
-      isPlaying = false;
-    });
-  });
+	audioElement.addEventListener("pause", () => {
+		isPlaying = false;
+	});
+});
 
-  onDestroy(() => {
-    if (audioElement) {
-      audioElement.pause();
-      audioElement.src = '';
-      audioElement = null;
-    }
-  });
+onDestroy(() => {
+	if (audioElement) {
+		audioElement.pause();
+		audioElement.src = "";
+		audioElement = null;
+	}
+});
 </script>
 
 {#if mounted}

@@ -9,7 +9,8 @@ import MainGridLayout from "../../layouts/MainGridLayout.astro";
 const locale = "en";
 setSafeLocale(locale);
 
-const aboutPost = await getEntry("spec", "about_en") || await getEntry("spec", "about");
+const aboutPost =
+	(await getEntry("spec", "about_en")) || (await getEntry("spec", "about"));
 
 if (!aboutPost) throw new Error("About page content not found");
 

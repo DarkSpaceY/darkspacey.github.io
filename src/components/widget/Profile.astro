@@ -6,7 +6,8 @@ import ImageWrapper from "../misc/ImageWrapper.astro";
 
 const config = profileConfig;
 const pathSegments = Astro.url.pathname.split("/").filter(Boolean);
-const currentLocale = (pathSegments[0] === "en" || pathSegments[0] === "zh") ? pathSegments[0] : "en";
+const currentLocale =
+	pathSegments[0] === "en" || pathSegments[0] === "zh" ? pathSegments[0] : "en";
 const aboutUrl = url(`/${currentLocale}/about/`);
 ---
 <div class="card-base p-3">

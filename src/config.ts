@@ -11,7 +11,7 @@ import { LinkPreset } from "./types/config";
 export const siteConfig: SiteConfig = {
 	title: "DarkSpace",
 	subtitle: "Code & Creativity",
-	lang: "zh",
+	lang: "zh_CN",
 	themeColor: {
 		hue: 250,
 		fixed: false,

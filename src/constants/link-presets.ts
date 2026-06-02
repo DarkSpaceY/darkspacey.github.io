@@ -2,7 +2,9 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { LinkPreset, type NavBarLink } from "@/types/config";
 
-export function getLinkPresets(locale: string): { [key in LinkPreset]: NavBarLink } {
+export function getLinkPresets(locale: string): {
+	[key in LinkPreset]: NavBarLink;
+} {
 	const prefix = locale ? `/${locale}` : "";
 	return {
 		[LinkPreset.Home]: {

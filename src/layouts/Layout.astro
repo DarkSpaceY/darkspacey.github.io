@@ -32,7 +32,8 @@ interface Props {
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
 
 const pathSegments = Astro.url.pathname.split("/").filter(Boolean);
-const currentLocale = (pathSegments[0] === "en" || pathSegments[0] === "zh") ? pathSegments[0] : "en";
+const currentLocale =
+	pathSegments[0] === "en" || pathSegments[0] === "zh" ? pathSegments[0] : "en";
 setSafeLocale(currentLocale);
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load

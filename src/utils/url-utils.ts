@@ -1,6 +1,6 @@
 import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 import { getSafeLocale } from "@i18n/locale";
+import { i18n } from "@i18n/translation";
 
 export function pathsEqual(path1: string, path2: string) {
 	const normalizedPath1 = path1.replace(/^\/|\/$/g, "").toLowerCase();
@@ -24,7 +24,10 @@ export function getTagUrl(tag: string, locale?: string): string {
 	return url(`/${loc}/archive/?tag=${encodeURIComponent(tag.trim())}`);
 }
 
-export function getCategoryUrl(category: string | null, locale?: string): string {
+export function getCategoryUrl(
+	category: string | null,
+	locale?: string,
+): string {
 	const loc = locale || getSafeLocale();
 	if (
 		!category ||
@@ -32,7 +35,9 @@ export function getCategoryUrl(category: string | null, locale?: string): string
 		category.trim().toLowerCase() === i18n(I18nKey.uncategorized).toLowerCase()
 	)
 		return url(`/${loc}/archive/?uncategorized=true`);
-	return url(`/${loc}/archive/?category=${encodeURIComponent(category.trim())}`);
+	return url(
+		`/${loc}/archive/?category=${encodeURIComponent(category.trim())}`,
+	);
 }
 
 export function getDir(path: string): string {
