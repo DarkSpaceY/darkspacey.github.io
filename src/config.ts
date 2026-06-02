@@ -77,16 +77,16 @@ export const licenseConfig: LicenseConfig = {
 };
 
 export const giscusConfig: GiscusConfig = {
-	enable: false,
-	repo: "your-username/your-repo",
-	repoId: "R_kgDOxxxxx",
-	category: "Announcements",
-	categoryId: "DIC_kwDOxxxxx",
+	enable: true,
+	repo: "DarkSpaceY/darkspacey.github.io",
+	repoId: "R_kgDOSur_Ow",
+	category: "General",
+	categoryId: "DIC_kwDOSur_O84C-VeF",
 	mapping: "pathname",
 	strict: false,
 	reactionsEnabled: true,
 	emitMetadata: false,
-	inputPosition: "top",
+	inputPosition: "bottom",
 	lang: "zh-CN",
 };
 
