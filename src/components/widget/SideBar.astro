@@ -1,8 +1,11 @@
 ---
 import type { MarkdownHeading } from "astro";
 import Categories from "./Categories.astro";
+import GitHubStats from "./GitHubStats.astro";
 import MusicPlayer from "./MusicPlayer.svelte";
+import NeteaseMusic from "./NeteaseMusic.astro";
 import Profile from "./Profile.astro";
+import SiteStats from "./SiteStats.astro";
 import Tag from "./Tags.astro";
 
 interface Props {
@@ -17,6 +20,9 @@ const className = Astro.props.class;
         <Profile></Profile>
         <!-- @ts-expect-error client:only is an Astro directive, not a prop -->
         <MusicPlayer client:only="svelte"></MusicPlayer>
+        <NeteaseMusic />
+        <GitHubStats />
+        <SiteStats />
     </div>
     <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
         <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
